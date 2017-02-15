@@ -1,0 +1,525 @@
+// Note: we use Autoprefixer to add vendor prefixes to our CSS -> https://github.com/postcss/autoprefixer
+
+@import '../partials/variables'; // colors, fonts etc...
+
+@import '../partials/mixins'; // custom mixins
+
+@import '../partials/layout'; // responsive grid and media queries
+
+/* -------------------------------- 
+
+Primary style
+
+-------------------------------- */
+
+*, *::after, *::before {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 62.5%;
+}
+
+body {
+	font: {
+		size: 1.6rem;
+		family: $primary-font; // variables inside partials > _variables.scss
+	}
+	color: $color-5;
+	background-color: white;
+	@include font-smoothing;
+}
+
+a {
+	color: $color-2;
+	text-decoration: none;
+}
+
+img {
+	max-width: 100%;
+}
+
+.cd-img-replace {
+	/* replace text with image */
+	color: transparent;
+	white-space: nowrap;
+	text-indent: 100%;
+	overflow: hidden;
+}
+
+/* -------------------------------- 
+
+Main Components 
+
+-------------------------------- */
+
+.cd-image-mask-effect {
+	min-height: 100vh;
+}
+
+.cd-project-mask {
+	position: relative;
+	height: 100vh;
+	width: 100%;
+	overflow: hidden;
+
+	h1 {
+		position: absolute;
+		z-index: 1;
+		top: 5%;
+		left: 5%;
+		font-size: 2.4rem;
+		font-weight: 300;
+		transition: opacity .4s;
+	}
+
+	&.center-title h1 {
+		/* this class is used to center the project title when a project is active */
+		@include center;
+		color: white;
+	}
+
+	.project-view &:not(.project-selected) {
+		/* the project-view class is added to the .cd-image-mask-effect element when a project is selected - hide all not selected projects */
+		position: absolute;
+		top: 0;
+		left: 0;
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.featured-image, 
+	.mask {
+		/* Force hardware acceleration */
+		transform: translateZ(0);
+		backface-visibility: hidden;
+		will-change: transform, opacity;
+	}
+
+	.featured-image {
+		/* project intro image */
+		position: absolute;
+		@include center;
+		height: 100%;
+		width: 100%;
+		background: url(../img/img-01.jpg) no-repeat center center;
+		background-size: cover;
+	}
+
+	.mask {
+		position: absolute;
+		@include center;
+		width: 300px;
+		height: 300px;
+
+		img {
+			display: block;
+		}
+
+		.mask-border {
+			/* this is used to create a frame around the mask */
+			position: absolute;
+		}
+
+		.mask-border-top, 
+		.mask-border-bottom {
+			/* this is used to create a frame around the mask */
+			height: calc(50vh - 150px + 10px);
+			width: 100vw;
+			@include center(x);
+		}
+
+		.mask-border-top {
+			bottom: calc(100% - 10px);
+		}
+
+		.mask-border-bottom {
+			top: calc(100% - 10px);
+		}
+
+		.mask-border-left, 
+		.mask-border-right {
+			/* this is used to create a frame around the mask */
+			height: 100vh;
+			width: calc(50vw - 150px + 10px);
+			@include center(y);
+		}
+
+		.mask-border-left {
+			left: calc(100% - 10px);
+		}
+
+		.mask-border-right {
+			right: calc(100% - 10px);
+		}
+	}
+
+	.project-trigger, 
+	.project-close {
+		position: absolute;
+		z-index: 3;
+		right: 5%;
+	}
+
+	.project-trigger {
+		bottom: 10%;
+		color: $color-5;
+		font-family: $secondary-font;
+		font-style: italic;
+		font-weight: bold;
+		text-decoration: underline;
+		transition: opacity .4s;
+
+		&:hover {
+			opacity: .8;
+		}
+	}
+
+	.project-close {
+		/* this is the 'X' icon - visible when a project has been selected */
+		top: 24px;
+		height: 48px;
+		width: 48px;
+		border-radius: 50%;
+		background: rgba(#000, .6);
+		transform: scale(0);
+		transition: transform .3s;
+
+		&:hover {
+			background: rgba(#000, 1);
+		}
+
+		&::after, &::before {
+			/* the 'X' lines */
+			content: '';
+			position: absolute;
+			width: 18px;
+			height: 2px;
+			top: 50%;
+			left: 50%;
+			background: white;
+		}
+
+		&::before {
+			transform: translateX(-50%) translateY(-50%) rotate(45deg);
+		}
+
+		&::after {
+			transform: translateX(-50%) translateY(-50%) rotate(-45deg);
+		}
+	}
+
+	&.project-selected .project-trigger {
+		/* hide .project-trigger when a project has been selected */
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	&.project-selected .project-close {
+		/* show the 'X' icon when a project has been selected */
+		transform: scale(1);
+		transition: transform .3s .6s, background .3s;
+	}
+
+	&.project-selected .featured-image {
+		transform: translateX(-50%) translateY(-50%) scale(1.15);
+		transition: transform .6s;
+	}
+
+	&.project-selected .mask {
+		/* mask scale value is set using js */
+		opacity: 0;
+		transition: transform .6s 0s, opacity .3s .3s;
+		transition-timing-function: cubic-bezier(.59,.05,.82,.13);
+	}
+
+	&.scaling-down.project-selected .project-close {
+		/* the scaling-down class is added to the project when the user closes it */
+		transform: scale(0);
+		transition: transform .3s 0s;
+	}
+
+	&.scaling-down.project-selected .featured-image {
+		/* the scaling-down class is added to the project when the user closes it */
+		transform: translateX(-50%) translateY(-50%);
+		transition: transform 1s;
+	}
+
+	&.scaling-down.project-selected .mask {
+		/* the scaling-down class is added to the project when the user closes it */
+		opacity: 1;
+		transition: transform 1s 0s, opacity .3s;
+		transition-timing-function: cubic-bezier(.08,.37,.13,.99);
+	}
+
+	&.no-transition .mask {
+		/* the no-transition class is used during window resize - remove transition while resetting mask scale */
+		transition: none;
+	}
+
+	&.dark-bg {
+		h1, .project-trigger {
+			color: white;
+		}
+	}
+
+	@media only screen and (max-height: 390px) {
+		.mask {
+			width: 76vh;
+			height: 76vh;
+
+			.mask-border-top, .mask-border-bottom {
+				/* height -> 50vh - 38vh + 10px */
+				height: calc(12vh + 10px);
+			}
+
+			.mask-border-left, .mask-border-right {
+				width: calc(50vw - 38vh + 10px);
+			}
+		}
+	}
+
+	@include MQ(M) {
+		h1 {
+			font-size: 3rem;
+		}
+
+		.mask {
+			width: 480px;
+			height: 480px;
+
+			.mask-border-top, .mask-border-bottom {
+				height: calc(50vh - 240px  + 10px);
+			}
+
+			.mask-border-left, .mask-border-right {
+				width: calc(50vw - 240px  + 10px);
+			}
+		}
+
+		.project-trigger {
+			font-size: 2rem;
+		}
+	}
+
+	@media only screen and (min-width: $M) and (max-height: 630px){
+		.mask {
+			width: 76vh;
+			height: 76vh;
+
+			.mask-border-top, .mask-border-bottom {
+				/* height -> 50vh - 38vh + 10px */
+				height: calc(12vh + 10px);
+			}
+
+			.mask-border-left, .mask-border-right {
+				width: calc(50vw - 38vh + 10px);
+			}
+		}
+	}
+
+	@include MQ(L) {
+
+		h1 {
+			font-size: 4.3rem;
+		}
+
+		&.center-title h1 {
+			font-size: 6rem;
+		}
+
+		.mask {
+			width: 640px;
+			height: 640px;
+
+			.mask-border-top, .mask-border-bottom {
+				height: calc(50vh - 320px  + 10px);
+			}
+
+			.mask-border-left, .mask-border-right {
+				width: calc(50vw - 320px  + 10px);
+			}
+		}
+
+		.project-trigger {
+			font-size: 2.4rem;
+		}
+	}
+
+	@media only screen and (min-width: $L) and (max-height: 840px){
+		.mask {
+			width: 76vh;
+			height: 76vh;
+
+			.mask-border-top, .mask-border-bottom {
+				/* height -> 50vh - 38vh + 10px */
+				height: calc(12vh + 10px);
+			}
+
+			.mask-border-left, .mask-border-right {
+				width: calc(50vw - 38vh + 10px);
+			}
+		}
+	}
+}
+
+.cd-project-mask.project-1 {
+	background-color: $color-1;
+
+	.mask-border {
+		background-color: $color-1;
+	}
+}
+
+.cd-project-mask.project-2 {
+	background-color: $color-2;
+
+	.mask-border {
+		background-color: $color-2;
+	}
+
+	.featured-image {
+		background-image: url(../img/img-02.jpg);
+	}
+}
+
+.cd-project-mask.project-3 {
+	background-color: $color-3;
+
+	.mask-border {
+		background-color: $color-3;
+	}
+
+	.featured-image {
+		background-image: url(../img/img-03.jpg);
+	}
+}
+
+.cd-project-mask.project-4 {
+	background-color: $color-4;
+
+	.mask-border {
+		background-color: $color-4;
+	}
+
+	.featured-image {
+		background-image: url(../img/img-04.jpg);
+	}
+}
+
+.cd-project-mask.project-5 {
+	background-color: $color-5;
+
+	.mask-border {
+		background-color: $color-5;
+	}
+
+	.featured-image {
+		background-image: url(../img/img-05.jpg);
+	}
+}
+
+.cd-scroll {
+	/* scroll down arrow */
+	position: fixed;
+	z-index: 3;
+	top: calc(100% - 100px);
+	@include center(x);
+	height: 48px;
+	width: 48px;
+	background: transparent url(../img/cd-arrow.svg) no-repeat center center;
+
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity .4s, visibility .4s;
+
+	.content-visible & {
+		opacity: 1;
+		visibility: visible;
+		animation: cd-translate 1.2s 1s;
+		animation-iteration-count: 2;
+		transition: opacity .4s .6s, visibility .4s .6s;
+	}
+
+	.scrolling & {
+		opacity: 0;
+		visibility: hidden;
+	} 
+}
+
+.cd-project-info {
+	/* project content */
+	position: absolute;
+	z-index: 2;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity .4s, visibility .4s;
+
+	&::before {
+		/* use to push the .content-wrapper below the project image */
+		content: '';
+		display: block;
+		height: 100%;
+		width: 100%;
+		pointer-events: none;
+	}
+
+	.content-wrapper {
+		position: relative;
+		z-index: 2;
+		padding: 2em 0 3em;
+		background-color: white;
+	}
+
+	.content-wrapper > * {
+		width: 90%;
+		max-width: 800px;
+		margin: 0 auto;
+		color: tint($color-5, 25%);
+		font-weight: 400;
+	}
+
+	.content-wrapper p {
+		margin-bottom: 2em;
+		line-height: 1.6;
+	}
+
+	.content-visible & {
+		-webkit-overflow-scrolling: touch;
+		opacity: 1;
+		visibility: visible;
+		transition: opacity 0s, visibility 0s;
+	}
+
+	@include MQ(L) {
+		.content-wrapper {
+			padding: 4em 0;
+		}
+
+		.content-wrapper > * {
+			font-size: 2rem;
+			line-height: 1.8;
+		}
+	}
+}
+
+/* -------------------------------- 
+
+Keyframes 
+
+-------------------------------- */
+
+@keyframes cd-translate {
+	0%, 100% {
+		transform: translateX(-50%);
+	}
+
+	50% {
+		transform: translateY(10px) translateX(-50%);
+	}
+}
