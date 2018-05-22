@@ -1,4 +1,4 @@
-/* -------------------------------- 
+/* --------------------------------
 
 Primary style
 
@@ -37,9 +37,9 @@ img {
   overflow: hidden;
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
-Main Components 
+Main Components
 
 -------------------------------- */
 .cd-image-mask-effect {
@@ -173,14 +173,14 @@ Main Components
   right: calc(100% - 10px);
 }
 
-.cd-project-mask .project-trigger,
-.cd-project-mask .project-close {
+.cd-project-mask .particles-trigger,
+.cd-project-mask .particles-close {
   position: absolute;
   z-index: 3;
   right: 5%;
 }
 
-.cd-project-mask .project-trigger {
+.cd-project-mask .particles-trigger {
   bottom: 10%;
   color: #0f293d;
   font-family: "Lora", serif;
@@ -191,11 +191,11 @@ Main Components
   transition: opacity .4s;
 }
 
-.cd-project-mask .project-trigger:hover {
+.cd-project-mask .particles-trigger:hover {
   opacity: .8;
 }
 
-.cd-project-mask .project-close {
+.cd-project-mask .particles-close {
   /* this is the 'X' icon - visible when a project has been selected */
   top: 24px;
   height: 48px;
@@ -211,11 +211,11 @@ Main Components
   transition: transform .3s, -webkit-transform .3s;
 }
 
-.cd-project-mask .project-close:hover {
+.cd-project-mask .particles-close:hover {
   background: black;
 }
 
-.cd-project-mask .project-close::after, .cd-project-mask .project-close::before {
+.cd-project-mask .particles-close::after, .cd-project-mask .particles-close::before {
   /* the 'X' lines */
   content: '';
   position: absolute;
@@ -226,25 +226,25 @@ Main Components
   background: white;
 }
 
-.cd-project-mask .project-close::before {
+.cd-project-mask .particles-close::before {
   -webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
       -ms-transform: translateX(-50%) translateY(-50%) rotate(45deg);
           transform: translateX(-50%) translateY(-50%) rotate(45deg);
 }
 
-.cd-project-mask .project-close::after {
+.cd-project-mask .particles-close::after {
   -webkit-transform: translateX(-50%) translateY(-50%) rotate(-45deg);
       -ms-transform: translateX(-50%) translateY(-50%) rotate(-45deg);
           transform: translateX(-50%) translateY(-50%) rotate(-45deg);
 }
 
-.cd-project-mask.project-selected .project-trigger {
-  /* hide .project-trigger when a project has been selected */
+.cd-project-mask.project-selected .particles-trigger {
+  /* hide .particles-trigger when a project has been selected */
   opacity: 0;
   visibility: hidden;
 }
 
-.cd-project-mask.project-selected .project-close {
+.cd-project-mask.project-selected .particles-close {
   /* show the 'X' icon when a project has been selected */
   -webkit-transform: scale(1);
       -ms-transform: scale(1);
@@ -276,7 +276,7 @@ Main Components
           transition-timing-function: cubic-bezier(0.59, 0.05, 0.82, 0.13);
 }
 
-.cd-project-mask.scaling-down.project-selected .project-close {
+.cd-project-mask.scaling-down.project-selected .particles-close {
   /* the scaling-down class is added to the project when the user closes it */
   -webkit-transform: scale(0);
       -ms-transform: scale(0);
@@ -315,7 +315,7 @@ Main Components
   transition: none;
 }
 
-.cd-project-mask.dark-bg h1, .cd-project-mask.dark-bg .project-trigger {
+.cd-project-mask.dark-bg h1, .cd-project-mask.dark-bg .particles-trigger {
   color: white;
 }
 
@@ -347,7 +347,7 @@ Main Components
   .cd-project-mask .mask .mask-border-left, .cd-project-mask .mask .mask-border-right {
     width: calc(50vw - 240px  + 10px);
   }
-  .cd-project-mask .project-trigger {
+  .cd-project-mask .particles-trigger {
     font-size: 2rem;
   }
 }
@@ -383,7 +383,7 @@ Main Components
   .cd-project-mask .mask .mask-border-left, .cd-project-mask .mask .mask-border-right {
     width: calc(50vw - 320px  + 10px);
   }
-  .cd-project-mask .project-trigger {
+  .cd-project-mask .particles-trigger {
     font-size: 2.4rem;
   }
 }
@@ -555,9 +555,9 @@ Main Components
   }
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
-Keyframes 
+Keyframes
 
 -------------------------------- */
 @-webkit-keyframes cd-translate {
