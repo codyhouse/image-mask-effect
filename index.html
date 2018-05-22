@@ -27,6 +27,8 @@
 			<span class="mask-border mask-border-left"></span>
 			<span class="mask-border mask-border-right"></span>
 		</div>
+        <script>
+        </script>
 
 		<a href="#0" class="project-trigger">Explore Project</a>
 
@@ -136,5 +138,12 @@
 <script src='js/anime.min.js'></script>
 <script src='js/particles.js'></script>
 <script src='js/demo.js'></script>
+   <script>
+            var particles = new Particles('.mask span');
+            $('.project-trigger').on('click', function() {
+                particles.disintegrate();
+            });
+    </script>
 </body>
 </html>
+
